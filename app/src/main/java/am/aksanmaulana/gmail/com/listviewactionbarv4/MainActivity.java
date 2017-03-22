@@ -71,14 +71,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.mAdd:
+            case R.id.mAdd: // jika pilih menu add
                 Intent intent3 = new Intent(this, Main2Activity.class);
                 startActivityForResult(intent3, ADD_REQUEST);
 
                 Log.i("shadow", "klick menu add");
                 return true;
 
-            case R.id.mEdit:
+            case R.id.mEdit: // jika pilih menu edit
                 Intent intent2 = new Intent(this, Main2Activity.class);
                 intent2.putExtra("messageEdit", message);
                 startActivityForResult(intent2, EDIT_REQUEST);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("shadow", "klick menu edit");
                 return true;
 
-            case R.id.mDelete:
+            case R.id.mDelete: // jika pilih menu delete
                 arrData.remove(positionList);
                 adapter.notifyDataSetChanged();
 
