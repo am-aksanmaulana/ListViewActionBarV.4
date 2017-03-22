@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class myAdapterView implements AdapterView.OnItemClickListener {
-        //int mSelectedItem;
         @Override
         public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
             String itemsData = (String) lvData.getItemAtPosition(position);
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //action bar code
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
