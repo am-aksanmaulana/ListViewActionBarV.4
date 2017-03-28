@@ -12,11 +12,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    public boolean checkList = false;
     static final int ADD_REQUEST = 23;  // untuk request add item
     static final int EDIT_REQUEST = 24; // untuk request edit item
 
@@ -43,21 +46,22 @@ public class MainActivity extends AppCompatActivity {
 
         // set si adapter ke list view nya
         lvData.setAdapter(adapter);
-        lvData.setOnItemClickListener(new myAdapterView());
+        lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String itemsData = (String) lvData.getItemAtPosition(position);
+                message = itemsData;
+                checkList = true;
+
+                positionList = position;
+                adapter.notifyDataSetChanged();
+
+                Log.i("shadow", message);
+            }
+        });
     }
 
-    private class myAdapterView implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-            String itemsData = (String) lvData.getItemAtPosition(position);
-            message = itemsData;
 
-            positionList = position;
-            adapter.notifyDataSetChanged();
-
-            Log.i("shadow", message);
-        }
-    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -77,16 +81,30 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.mEdit: // jika pilih menu edit
-                Intent intent2 = new Intent(this, Main2Activity.class);
-                intent2.putExtra("messageEdit", message);
-                startActivityForResult(intent2, EDIT_REQUEST);
+                if(checkList == true) {
+                    Intent intent2 = new Intent(this, Main2Activity.class);
+                    intent2.putExtra("messageEdit", message);
+                    startActivityForResult(intent2, EDIT_REQUEST);
 
+                    //Log.i("shadow", "klick menu edit");
+                    //return true;
+                }else{
+                    String pesan = "Pilih satu data yang akan diubah!";
+                    Toast toast = Toast.makeText(getApplicationContext(), pesan, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
                 Log.i("shadow", "klick menu edit");
                 return true;
 
             case R.id.mDelete: // jika pilih menu delete
-                arrData.remove(positionList);
-                adapter.notifyDataSetChanged();
+                if(checkList == true) {
+                    arrData.remove(positionList);
+                    adapter.notifyDataSetChanged();
+                }else{
+                    String pesan = "Pilih satu data yang akan dihapus!";
+                    Toast toast = Toast.makeText(getApplicationContext(), pesan, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
 
                 Log.i("shadow", "klick menu delete");
                 return true;
@@ -98,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-
+        checkList = false;
         // cek request Code
         if(requestCode == ADD_REQUEST){     // jika yang dimaksud tambah data
             String receiveAddData = data.getStringExtra("stringAddData");
